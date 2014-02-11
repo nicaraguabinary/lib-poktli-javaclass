@@ -210,11 +210,14 @@ public class OpCode {
 	public static final int OPCODE_swap = 0x5f;
 	public static final int OPCODE_tableswitch = 0xaa;
 	public static final int OPCODE_wide = 0xc4;
-
+	//Opcodes reservados: http://docs.oracle.com/javase/specs/jvms/se5.0/html/Instructions.doc.html#60105
+	//public static final int OPCODE_breakpoint = 0xca;	//"They cannot appear in valid class files"
+	//public static final int OPCODE_impdep1 = 0xfe;	//"They cannot appear in valid class files"
+	//public static final int OPCODE_impdep2 = 0xff;	//"They cannot appear in valid class files"
 	
 	private static boolean _bibInicializada	= false;
 	private static int _usoBibOpCodes	= 0;
-	private static OpCode[] _bibOpCodes = new OpCode[256]; //Actualmente son 200 opCodes
+	private static OpCode[] _bibOpCodes = new OpCode[256]; //Son 200 opCodes, segœn especificaciones class 5.0
 	
 	OpCode(String nomOp, int valOp, String descOp, int bytesPostOp){
 		_nombreOpCode = nomOp;
@@ -239,15 +242,19 @@ public class OpCode {
 		return _bytesPosteriores;
 	}
 	
-	static public OpCode dameOpCode(byte[] codigo, int posicion){
-		if(!_bibInicializada){
-			inicializarBibliotecaOpCodes();
-			_bibInicializada = true;
-		}
+	static public OpCode dameOpCode(final byte[] codigo, final int posicion){
+		assert (codigo!=null);
 		if(codigo!=null){
+			assert (posicion>=0 && posicion<codigo.length);
 			if(posicion>=0 && posicion<codigo.length){
 				int valOp = ((int)codigo[posicion] & 0xFF);
 				assert (valOp>=0 && valOp<256);
+				//Inicializar biblioteca de opcodes (si es necesario)
+				if(!_bibInicializada){
+					inicializarBibliotecaOpCodes();
+					_bibInicializada = true;
+				}
+				assert (_usoBibOpCodes>=200); //Segun documento class 5 debe incluir 200 opcodes
 				//Buscar OpCode
 				int i;
 				for(i=0; i<_usoBibOpCodes; i++){
@@ -300,9 +307,10 @@ public class OpCode {
 						return opCode;
 					}
 				}
+				Log.error("Ningun Opcode corresponde para el valor byte='" + valOp + "'.");
 			}
 		}
-		assert false; //OpCode no enconrtado, no deberia suceder
+		assert false; //OpCode no encontrado, no deberia suceder
 		return null;
 	}
 	
@@ -460,7 +468,7 @@ public class OpCode {
 		registrarOpCode("iload_3", OPCODE_iload_3, 0, "LoadÊintÊfrom local variable");
 		registrarOpCode("imul", OPCODE_imul, 0, "MultiplyÊint");
 		registrarOpCode("ineg", OPCODE_ineg, 0, "NegateÊint");
-		registrarOpCode("instanceof", OPCODE_instanceof, 0, "Determine if object is of given type");
+		registrarOpCode("instanceof", OPCODE_instanceof, 2, "Determine if object is of given type");
 		registrarOpCode("invokeinterface", OPCODE_invokeinterface, 4, "Invoke interface method");
 		registrarOpCode("invokespecial", OPCODE_invokespecial, 2, "InvokeÊinstance method; special handling for superclass, private, and instance initialization method invocations");
 		registrarOpCode("invokestatic", OPCODE_invokestatic, 2, "Invoke a class (static) method");
@@ -533,6 +541,11 @@ public class OpCode {
 		registrarOpCode("swap", OPCODE_swap, 0, "Swap the top two operand stack values");
 		registrarOpCode("tableswitch", OPCODE_tableswitch, -1, "Access jump table by index and jump"); //Variable
 		registrarOpCode("wide", OPCODE_wide, -1, "Extend local variable index by additional bytes"); //Variable
+		//dbgImprimirValoresDeOpCodesNoUsados();
+		Log.informativo("... biblioteca inicializada con "+_usoBibOpCodes+" opcodes.");
+	}
+	
+	/*static private void dbgImprimirValoresDeOpCodesNoUsados(){
 		//Por curiosidad, investigar los opCodes no utilizados
 		int iCod, codIniHueco = -1;
 		for(iCod=0; iCod<256; iCod++){ //Todos los posibles valores
@@ -560,7 +573,6 @@ public class OpCode {
 			if(tamanoHueco==1) Log.informativo("Opcode no ocupado: " + codIniHueco);
 			else Log.informativo("Opcodes no ocupados " + codIniHueco + " -> " + (iCod - 1));
 		}
-		Log.informativo("... biblioteca de OpCodes inicializada.");
-	}
+	}*/
 	
 }

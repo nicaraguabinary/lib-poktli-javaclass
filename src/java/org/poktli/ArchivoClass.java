@@ -8,7 +8,7 @@ import java.io.FileOutputStream;
 import org.poktli.classdatos.*;
 
 public class ArchivoClass {
-	//Identificadores de biblioteca de constantes
+	//Identificadores de biblioteca de constantes,
 	//segun especificaciones de archivo CLASS.
 	public static final int CONSTANT_Class = 7;
 	public static final int CONSTANT_Fieldref = 9;
@@ -22,19 +22,19 @@ public class ArchivoClass {
 	public static final int CONSTANT_NameAndType = 12;
 	public static final int CONSTANT_Utf8 = 1; 
 	 
-	//Contenido de archivo
+	//Contenido de archivo,
 	//segun especificaciones de archivo CLASS.
 	int encabezadoMagic		= 0;		//Debe ser 0xCAFEBABE segun especificaciones
-	int verionMayor			= 0;
-	int versionMenor		= 0;
-	ConstBase[] bibConstantes = null;
-	int mascaraAccesoClase	= 0;
+	int verionMayor			= 0;		//Version del formato de archivo CLASS
+	int versionMenor		= 0;		//Version del formato de archivo CLASS
+	ConstBase[] bibConstantes = null;	//Biblioteca de constantes del CLASS, son referenciadas por indice base1 (el indice cero es reservado)
+	int mascaraAccesoClase	= 0;		//Mascara de acceso a la clase: Public, Protected, Private, etc.. 
 	int indiceClaseThis		= 0; 		//Indice en las constantes
 	int indiceClaseSuper	= 0; 		//Indice en las constantes
 	int[] indicesInterfaces	= null;		//Interfaces que implementa esta clase, indice en las constantes
-	Elemento[] campos = null;	//Campos de la clase
-	Elemento[] metodos = null;	//Metodos de la clase
-	Atributo[] atributos = null;
+	Elemento[] campos 		= null;		//Campos de la clase
+	Elemento[] metodos 		= null;		//Metodos de la clase
+	Atributo[] atributos 	= null;		//Atributos de la clase
 	
 	public ArchivoClass(){
 		//Nada

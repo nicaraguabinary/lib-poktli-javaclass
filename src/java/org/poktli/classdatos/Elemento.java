@@ -47,7 +47,7 @@ public class Elemento {
 			assert (bibConstantes[_indiceNombre-1] instanceof ConstUtf8);
 			assert (_indiceDescriptor>0 && _indiceDescriptor<=bibConstantes.length); 
 			assert (bibConstantes[_indiceDescriptor-1] instanceof ConstUtf8);
-			int conteoAtributos = flujo.readUnsignedShort(); Log.acumulativo(espaciosAntesDeTexto + "Campo, mascaraAcceso("+strMascaraAccesoCampo(_mascaraAcceso)+") nom -> '"+((ConstUtf8)bibConstantes[_indiceNombre-1]).valorCadena()+"' desc -> '"+((ConstUtf8)bibConstantes[_indiceDescriptor-1]).valorCadena()+"' conteoAtributos("+conteoAtributos+").");
+			int conteoAtributos = flujo.readUnsignedShort(); Log.acumulativo(espaciosAntesDeTexto + "Campo '"+((ConstUtf8)bibConstantes[_indiceNombre-1]).valorCadena()+"', mascaraAcceso("+strMascaraAccesoCampo(_mascaraAcceso)+") desc -> '"+((ConstUtf8)bibConstantes[_indiceDescriptor-1]).valorCadena()+"' conteoAtributos("+conteoAtributos+").");
 	    	if(conteoAtributos>0){
 	    		_atributos = new Atributo[conteoAtributos];
 	    		int iAtrb;
@@ -77,7 +77,7 @@ public class Elemento {
 			assert (bibConstantes[_indiceNombre-1] instanceof ConstUtf8);
 			assert (_indiceDescriptor>0 && _indiceDescriptor<=bibConstantes.length); 
 			assert (bibConstantes[_indiceDescriptor-1] instanceof ConstUtf8);
-			int conteoAtributos = flujo.readUnsignedShort(); Log.acumulativo(espaciosAntesDeTexto + "Metodo, mascaraAcceso("+strMascaraAccesoMetodo(_mascaraAcceso)+") nom -> '"+((ConstUtf8)bibConstantes[_indiceNombre-1]).valorCadena()+"' desc -> '"+((ConstUtf8)bibConstantes[_indiceDescriptor-1]).valorCadena()+"' conteoAtributos("+conteoAtributos+").");
+			int conteoAtributos = flujo.readUnsignedShort(); Log.acumulativo(espaciosAntesDeTexto + "Metodo '"+((ConstUtf8)bibConstantes[_indiceNombre-1]).valorCadena()+"', mascaraAcceso("+strMascaraAccesoMetodo(_mascaraAcceso)+") desc -> '"+((ConstUtf8)bibConstantes[_indiceDescriptor-1]).valorCadena()+"' conteoAtributos("+conteoAtributos+").");
 	    	if(conteoAtributos>0){
 	    		_atributos = new Atributo[conteoAtributos];
 	    		int iAtrb;

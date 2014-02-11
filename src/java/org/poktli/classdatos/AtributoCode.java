@@ -79,9 +79,82 @@ public class AtributoCode implements Atributo {
 		assert wrapped.arrayOffset() <= datos.length;
 		//Imprimir codigo fuente
 		Log.acumulativo(espaciosAntesDeTexto + "   Bytes Code " + bytesCodigo);
-		//Al pasar parametros 'null' solamente se imprimira el codigo
-		//reemplazarLlamadaPorLlamadaEstatica(null, null, null, true, null, null, null, null, bibConstantes, espaciosAntesDeTexto+"   ");
+		//
+		analizarOpCodes(bibConstantes, espaciosAntesDeTexto+"   ");
 	}
+	
+	public void analizarOpCodes(ConstBase[] bibConstantes, String espaciosAntesDeTexto){
+		int bytesCodigo = codigo.length;
+		int iByte = 0;
+		while(iByte<bytesCodigo){
+			OpCode datosCode = OpCode.dameOpCode(codigo, iByte);
+			int opCode = datosCode.valorOpCode();
+			int bytesPosteriores = datosCode.bytesPosteriores();
+			int datosBytesPosteriores = 0;
+			boolean datoEsMethodRef = false;
+			boolean datoEsMethodInterfaceRef = false;
+			String descParametro = "";
+			if(bytesPosteriores==1){
+				datosBytesPosteriores = (codigo[iByte+1] & 0xFF); assert datosBytesPosteriores>=0;
+			} else if(bytesPosteriores==2){
+				datosBytesPosteriores = ((codigo[iByte+1] & 0xFF) << 8) | (codigo[iByte+2] & 0xFF); //assert datosBytesPosteriores>=0;
+				switch(opCode){
+					case OpCode.OPCODE_invokespecial:
+					case OpCode.OPCODE_invokestatic:
+					case OpCode.OPCODE_invokevirtual:
+						datoEsMethodRef = true; break;
+					default: break;
+				}
+			} else if(bytesPosteriores==4){
+				datosBytesPosteriores = ((codigo[iByte+1] & 0xFF) << 8) | (codigo[iByte+2] & 0xFF); //assert datosBytesPosteriores>=0;
+				switch(opCode){
+					case OpCode.OPCODE_invokeinterface:
+						datoEsMethodInterfaceRef = true; break;
+					default: break;
+				}
+			}
+			//Averiguar el nombre del metodo invocado
+			if(datoEsMethodRef){
+				assert (datosBytesPosteriores>0 && datosBytesPosteriores<=bibConstantes.length);
+				assert (bibConstantes[datosBytesPosteriores-1] instanceof ConstMethodRef);
+				if(datosBytesPosteriores>0 && datosBytesPosteriores<=bibConstantes.length){
+					if(bibConstantes[datosBytesPosteriores-1] instanceof ConstMethodRef){
+						ConstMethodRef methodRef = (ConstMethodRef) bibConstantes[datosBytesPosteriores-1];
+						assert (methodRef.indiceNomYTipo()>0 && methodRef.indiceNomYTipo()<=bibConstantes.length);
+						assert bibConstantes[methodRef.indiceNomYTipo()-1] instanceof ConstNameAndType;
+						ConstNameAndType nomTipo = (ConstNameAndType)bibConstantes[methodRef.indiceNomYTipo()-1];
+						assert (nomTipo.indiceConstNombre()>0 && nomTipo.indiceConstNombre()<=bibConstantes.length);
+						assert bibConstantes[nomTipo.indiceConstNombre()-1] instanceof ConstUtf8;
+						ConstUtf8 nomMetodo = (ConstUtf8)bibConstantes[nomTipo.indiceConstNombre()-1];
+						descParametro = " " + nomMetodo.valorCadena();
+					} else descParametro = " ERROR_INDICE_NO_MethodRef";
+				} else descParametro = " ERROR_INDICE_FUERA_LIMITES";
+			}
+			//Averiguar el nombre del metodo virtual invocado
+			if(datoEsMethodInterfaceRef){
+				assert (datosBytesPosteriores>0 && datosBytesPosteriores<=bibConstantes.length);
+				assert (bibConstantes[datosBytesPosteriores-1] instanceof ConstInterfaceMethodRef);
+				if(datosBytesPosteriores>0 && datosBytesPosteriores<=bibConstantes.length){
+					if(bibConstantes[datosBytesPosteriores-1] instanceof ConstInterfaceMethodRef){
+						ConstInterfaceMethodRef methodRef = (ConstInterfaceMethodRef) bibConstantes[datosBytesPosteriores-1];
+						assert (methodRef.indiceNomYTipo()>0 && methodRef.indiceNomYTipo()<=bibConstantes.length);
+						assert bibConstantes[methodRef.indiceNomYTipo()-1] instanceof ConstNameAndType;
+						ConstNameAndType nomTipo = (ConstNameAndType)bibConstantes[methodRef.indiceNomYTipo()-1];
+						assert (nomTipo.indiceConstNombre()>0 && nomTipo.indiceConstNombre()<=bibConstantes.length);
+						assert bibConstantes[nomTipo.indiceConstNombre()-1] instanceof ConstUtf8;
+						ConstUtf8 nomMetodo = (ConstUtf8)bibConstantes[nomTipo.indiceConstNombre()-1];
+						descParametro = " " + nomMetodo.valorCadena();
+					} else descParametro = " ERROR_INDICE_NO_InterfaceMethodRef";
+				} else descParametro = " ERROR_INDICE_FUERA_LIMITES";
+			}
+			Log.acumulativo(espaciosAntesDeTexto + "OpCode "+iByte+", '"+datosCode.nombreOpCode()+"'" + (bytesPosteriores!=0?" + " + bytesPosteriores + " (" + datosBytesPosteriores + descParametro+ ")" : "") +".");
+			//assert datosCode!=null;
+			//assert datosCode.bytesPosteriores()>=0;
+			iByte += 1 + bytesPosteriores;
+			assert iByte<=bytesCodigo;
+		}
+	}
+
 	
 	public Atributo atributoSegunNombre(int indNombre){
 		if(atributos!=null){

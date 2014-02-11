@@ -2,7 +2,7 @@
 poktli
 ==========================
 
-Poktli ("humo" o "aroma" en Nahuatl) es una librería para la carga y guardado de archivos compilados de JAVA (.class). Puede ser utilizada como base para el desarrollo de decompiladores, (des)ofuscadores, inyectores de código y otras herramientas para proyectos JAVA.
+Poktli ("aroma" en Nahuatl) es una librería para la carga y guardado de archivos compilados de JAVA (.class). Puede ser utilizada como base para el desarrollo de decompiladores, (des)ofuscadores, inyectores de código y otras herramientas para proyectos JAVA.
 
 ==========================
 Licencia
@@ -12,12 +12,14 @@ GPLv2, ver archivo LICENSE
 ==========================
 Origen
 ==========================
+Publicada el 09/feb/2013.
+
 Esta librería fue inicialmente desarrollada por Marcos Ortega a partir del documento de especificaciones de archivos CLASS publicado por Oracle:  http://docs.oracle.com/javase/specs/jvms/se5.0/html/ClassFile.doc.html
 
 ==========================
 Utilidad
 ==========================
-Esta implementación intenta ser una alternativa a "javap", apuntando a tener disponibles versiones en C, Java y otros lenguajes de interés. De tal forma que los desarrolladores podamos desarrollar software con la funcionalidad de cargar, manipular y guardar archivos ".class".
+Esta implementación intenta ser una alternativa a "javap", apuntando a tener disponibles versiones en C, Java y otros lenguajes de interés. De tal forma que los desarrolladores podamos crear software con la funcionalidad de cargar, manipular y guardar archivos ".class".
 
 Posibles implementaciones prácticas de esta librería incluyen el desarrollo del siguiente tipo de software:
 
@@ -27,7 +29,7 @@ b) para decompilación de binarios (interpretar class)
 
 c) para ofuscación en binarios (manipular class)
 
-d) desofuscación de binarios (interpretar class)
+d) desofuscación de binarios (interpretar class y opcodes)
 
 e) inyección o extracción de opcodes, miembros, métodos o invocaciones a métodos (manipular class)
 
@@ -47,11 +49,11 @@ Prueba simple y silenciosa:
 
 $ java -jar ClassSnifSnif.jar -class ./miArchivoCompilado.class 
 
-Prueba imprimiendo el contenido del archivo CLASS:
+Prueba describiendo el contenido del archivo:
 
 $ java -jar ClassSnifSnif.jar -v -class ./miArchivoCompilado.class 
 
-Prueba de carga y guardado de archivo CLASS:
+Prueba de carga y guardado de archivo:
 
 $ java -jar ClassSnifSnif.jar -test -class ./miArchivoCompilado.class 
 

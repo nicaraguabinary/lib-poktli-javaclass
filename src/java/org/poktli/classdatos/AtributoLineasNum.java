@@ -18,7 +18,7 @@ public class AtributoLineasNum implements Atributo {
 		_indiceNomAtributo = iNom;
 		//
 		ByteBuffer wrapped = ByteBuffer.wrap(datos);
-		int cantLineas = wrapped.getShort(); Log.acumulativo(espaciosAntesDeTexto + "   " + cantLineas +" lineas de codigo fuente.");
+		int cantLineas = wrapped.getShort(); Log.acumulativo(espaciosAntesDeTexto + "   " + cantLineas +" registros de lineas de codigo fuente.");
 		if(cantLineas>0){
 			lineasFuente = new CodeLine[cantLineas];
 			int i;

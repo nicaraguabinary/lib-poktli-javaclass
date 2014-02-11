@@ -6,8 +6,8 @@ import org.poktli.Log;
 
 public class ConstInterfaceMethodRef implements ConstBase {
 
-	int _indiceClase = 0;
-	int _indiceNomYTipo = 0;
+	private int _indiceClase = 0;
+	private int _indiceNomYTipo = 0;
 	
 	public ConstInterfaceMethodRef(DataInputStream flujo){
 		cargarDatosDesdeFlujo(flujo);
@@ -51,6 +51,14 @@ public class ConstInterfaceMethodRef implements ConstBase {
 		if(!(bibConstantes[_indiceNomYTipo-1] instanceof ConstNameAndType)) return false;
 		//
 		return true;
+	}
+	
+	public int indiceClase(){
+		return _indiceClase;
+	}
+	
+	public int indiceNomYTipo(){
+		return _indiceNomYTipo;
 	}
 	
 	public String toString(){

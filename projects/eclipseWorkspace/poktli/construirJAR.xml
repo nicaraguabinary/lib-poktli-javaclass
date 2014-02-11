@@ -2,7 +2,7 @@
 <!-- Configuration of the Ant build system to generate a Jar file --> 
 <project name="ClassSnifSnif" default="CreateJAR">
 	<target name="CreateJAR" description="Crear y empacar archivos en un JAR">
-        <jar destfile="../ClassSnifSnif.jar" basedir="bin" includes="**/*.class">
+        <jar destfile="../../../bin/ClassSnifSnif.jar" basedir="bin" includes="**/*.class">
             <manifest>
       		<attribute name="Main-Class" value="org.poktli.MainSnifSnif"/>
      		</manifest>

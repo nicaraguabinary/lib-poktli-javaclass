@@ -18,7 +18,12 @@ public class MainSnifSnif {
 			} else if(argumento.equals("-class")){
 				if((iArg+1)<args.length) rutaArchivoClass = args[++iArg];
 			}    
-		}  
+		}
+		//Temporal (prueba local)
+		if(rutaArchivoClass.length()==0){
+			rutaArchivoClass = "./bin/org/poktli/ArchivoClass.class";
+			modoVerboso = true;
+		}
 		//Ejecutar
 		if(rutaArchivoClass.length()==0){
 			Log.error("No se ha especificado un archivo class.");
@@ -27,12 +32,12 @@ public class MainSnifSnif {
 			ArchivoClass clase = new ArchivoClass();
 			Log.vaciarAcumulativo(); 
 			if(!clase.cargarClaseDesdeArchivo(rutaArchivoClass)){
-				Log.msgObligatorio(Log.cadenaAcumulada());
+				Log.msgObligatorio(Log.cadenaAcumulada()); Log.vaciarAcumulativo();
 				Log.error("ERROR interprentando archivo class '"+rutaArchivoClass+"'.");
 			} else {
 				if(modoVerboso){
 					Log.informativo("------------------------");
-					Log.informativo(Log.cadenaAcumulada());
+					Log.informativo(Log.cadenaAcumulada()); Log.vaciarAcumulativo();
 					Log.informativo("------------------------");
 				}
 				Log.msgObligatorio("Archivo class '"+rutaArchivoClass+"' interpretado exitosamente.");
@@ -42,14 +47,15 @@ public class MainSnifSnif {
 					if(!clase.guardarClaseEnArchivo(rutaArchivoPruebaGuardado)){
 						Log.error("ERROR guardando archivo class '"+rutaArchivoPruebaGuardado+"'.");
 					} else {
+						Log.msgObligatorio("Copia de archivo class guardada exitosamente, verificandola...");
 						ArchivoClass clase2 = new ArchivoClass();
 						if(!clase2.cargarClaseDesdeArchivo(rutaArchivoPruebaGuardado)){
-							Log.msgObligatorio(Log.cadenaAcumulada());
+							Log.msgObligatorio(Log.cadenaAcumulada()); Log.vaciarAcumulativo();
 							Log.error("ERROR en carga de archivo class guardado '"+rutaArchivoPruebaGuardado+"'.");
 							Log.error("--- EL GUARDADO DE CLASE HA FALLADO. ---");
 						} else {
+							Log.msgObligatorio("... copia ha sido interpretada exitosamente (no se verific— el contenido, solo se carg—)");
 							Log.msgObligatorio("--- Prueba de guardado de clase ha sido exitosa. ---");
-							Log.msgObligatorio("(Archivo fue interpretado, se guardo una copia y finalmente se interpreto la copia para asegurar la integridad binaria)");
 						}
 					}
 				}
